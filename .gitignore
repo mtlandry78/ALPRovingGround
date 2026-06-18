@@ -1,0 +1,38 @@
+uv.lock
+.venv/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Packaging
+build/
+dist/
+.eggs/
+*.egg-info/
+*.egg
+
+# Testing
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+
+# Type checker / Lint caches
+.mypy_cache/
+.ruff_cache/
+
+# IDEs & OS files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Output artifacts from ALPRGbatch.py / alprg CLI
+annotated_output/
+alpr_results.csv
