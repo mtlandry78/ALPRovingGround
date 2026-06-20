@@ -32,6 +32,25 @@ There will also be a CSV file titled "alpr_results.csv". This gives you an easy 
   
 You can select from a wide range of both YOLO detection models and OCR models, as well as test your custom models by reading into the Fast-ALPR documentation: https://ankandrew.github.io/fast-alpr/latest/
 
+- Multi-engine library & headless CLI:
+
+Under the hood, `ALPRGbatch.py` is now a thin GUI wrapper around an installable library, `alprg` (in `src/alprg/`). It supports running multiple ALPR engines side-by-side (currently `fast_alpr` and an optional `openalpr` adapter) and classifies each image as:
+  - **Class A** — no engine detected a plate at all
+  - **Class B** — a plate was detected but misread (vs. ground truth, or vs. the other engines if no ground truth is given)
+  - **Class C** — read correctly (matches ground truth, or engines agree with each other)
+
+This is meant to give PlateShapez's perturbation/optimization work a measurable signal: which images defeat detection (A) vs. detection-but-misread (B) vs. no effect (C).
+
+If you don't have a GPU or `fast_alpr`/`openalpr` installed, the library degrades gracefully — install with `uv sync` (core deps are just `numpy`+`pillow`) and you can still run everything against a `fake` engine for testing.
+
+A headless CLI is also available, useful for scripting or CI:
+
+```bash
+uv run alprg classify /path/to/images --engines fast_alpr,openalpr --csv-out results.csv
+```
+
+Run `--engines fake` to try it without any ALPR dependencies installed.
+
 - Support:
   
 I'm hardly a coder, much less a software engineer. I cannot offer support! 
