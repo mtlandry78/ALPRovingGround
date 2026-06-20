@@ -19,6 +19,19 @@ except ImportError:
     _FAST_ALPR_AVAILABLE = False
 
 
+def _coerce_confidence(confidence: Any) -> float:
+    """Reduce an OCR confidence to a single float.
+
+    fast_alpr returns per-character confidences as a list/array on some model
+    versions and a scalar on others; average the list so callers always get one
+    number.
+    """
+    if isinstance(confidence, (list, tuple, np.ndarray)):
+        values = [float(value) for value in confidence]
+        return sum(values) / len(values) if values else 0.0
+    return float(confidence)
+
+
 @register
 class FastALPREngine(ALPREngine):
     """Wraps `fast_alpr.ALPR` (the original ALPRGbatch.py model stack)."""
@@ -62,7 +75,9 @@ class FastALPREngine(ALPREngine):
                 PlateDetection(
                     bounding_box=BoundingBox(bb.x1, bb.y1, bb.x2, bb.y2),
                     ocr=(
-                        OCRReading(text=ocr.text, confidence=float(ocr.confidence)) if ocr else None
+                        OCRReading(text=ocr.text, confidence=_coerce_confidence(ocr.confidence))
+                        if ocr
+                        else None
                     ),
                 )
             )

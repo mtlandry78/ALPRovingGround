@@ -13,7 +13,7 @@ dependencies = [
 # GPU-accelerated fast-alpr (the original ALPRGbatch.py stack).
 fast-alpr = ["fast-alpr[onnx-gpu]", "onnxruntime-gpu", "opencv-python"]
 # CPU-only fast-alpr, for machines without a CUDA GPU.
-fast-alpr-cpu = ["fast-alpr", "opencv-python"]
+fast-alpr-cpu = ["fast-alpr", "onnxruntime", "opencv-python"]
 # OpenALPR's Python bindings are NOT pip-installable: they bind to a system-level
 # `libopenalpr` C++ library built/installed per https://github.com/openalpr/openalpr.
 # This group is an intentional no-op placeholder that documents the requirement;
